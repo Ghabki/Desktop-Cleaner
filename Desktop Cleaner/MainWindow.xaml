@@ -13,7 +13,8 @@
         <ListBox x:Name="List_Files" HorizontalAlignment="Left" Height="269" VerticalAlignment="Top" Width="252" Background="#FFE0E0E0" FontSize="14"/>
         <CheckBox HorizontalAlignment="Left" Margin="301,147,0,0" VerticalAlignment="Top" Height="22" Width="138" Background="#FFB0B2B4" Foreground="#FFD8D8D8" FontSize="14" Content="Make new folder" />
         <Button x:Name="Clean_Button" Content="Clean" HorizontalAlignment="Left" Margin="301,198,0,0" VerticalAlignment="Top" Width="138" Height="47" Background="#FF0E4E7A" Foreground="#FFC5C5C5" FontSize="14" Click="Clean_Button_Click"/>
-        <Button x:Name="Add_Button" Content="Add file to exclude" HorizontalAlignment="Left" Margin="257,10,0,0" VerticalAlignment="Top" Width="225" Height="50" Click="Add_Button_Button_Click" FontSize="14"/>
+        <Button x:Name="Add_Button" Content="Add file&#x0a;to exclude" HorizontalAlignment="Left" Margin="257,10,0,0" VerticalAlignment="Top" Width="111" Height="50" Click="Add_Button_Button_Click" FontSize="14"/>
         <Button x:Name="Remove_Button" Content="Remove" HorizontalAlignment="Left" Margin="257,65,0,0" VerticalAlignment="Top" Width="225" Height="50" FontSize="14" Click="Remove_Button_Click"/>
+        <Button x:Name="Add_button_f" Content="Add folder&#x0a;to exclude" HorizontalAlignment="Left" Margin="368,10,0,0" VerticalAlignment="Top" Width="114" Height="50" FontSize="14" Click="Add_button_folder"/>
     </Grid>
 </Window>
