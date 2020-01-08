@@ -29,7 +29,9 @@ namespace Desktop_Cleaner {
 
         #region Button_clicks
         private void Clean_Button_Click(object sender, RoutedEventArgs e) {
-            //gre po podatkih in premakne kar mora in kaj ne
+            CheckBox_save();
+            clean_desek();
+
         }
 
         private void Remove_Button_Click(object sender, RoutedEventArgs e) {
@@ -41,7 +43,6 @@ namespace Desktop_Cleaner {
         private void Add_Button_Button_Click(object sender, RoutedEventArgs e) {
             String File_name = String.Empty;
 
-            //todo add gumb za file in folder dialog rak
             try{
                 System.Windows.Forms.OpenFileDialog dlg = new System.Windows.Forms.OpenFileDialog {
                     InitialDirectory = "Desktop"
@@ -61,9 +62,9 @@ namespace Desktop_Cleaner {
         private void Add_button_folder(object sender, RoutedEventArgs e) {
             String File_name = String.Empty;
 
-                //todo add gumb za file in folder dialog rak
                 try {
                 FolderBrowserDialog lol = new FolderBrowserDialog {
+                    //RootFolder = Environment.SpecialFolder.Desktop,
                     SelectedPath = "Desktop"
                 };
 
@@ -96,15 +97,8 @@ namespace Desktop_Cleaner {
         private void Init() {
             Database_innit();
             Listbox_innit();
-            List_Files.Items.Add("1");
-            List_Files.Items.Add("2");
-            List_Files.Items.Add("3");
-            List_Files.Items.Add("4");
-
+            CheckBox_set();
         }
-        //TODO naredi da z db pobere imena filow in da v list box
-
-
 
         #endregion
 
@@ -112,25 +106,31 @@ namespace Desktop_Cleaner {
         private void Add_file(String file_name) {
             string prilepi = string.Empty;
 
-            using (SQLiteCommand cmd = new SQLiteCommand(sqlite_conn)) {
+            try {
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlite_conn)) {
 
-                cmd.CommandText = @"INSERT INTO File_names (name) VALUES (@datoteka);";
-                cmd.Parameters.AddWithValue("@datoteka", file_name);
-                cmd.Prepare();
-                cmd.ExecuteNonQuery();
+                    cmd.CommandText = @"INSERT INTO File_names (name) VALUES (@datoteka);";
+                    cmd.Parameters.AddWithValue("@datoteka", file_name);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
 
-                //List_Files.Items.Add("asg");
-                prilepi = Refactor_string(file_name);
-                List_Files.Items.Add(prilepi);
-
+                    //List_Files.Items.Add("asg");
+                    prilepi = Refactor_string(file_name);
+                    List_Files.Items.Add(prilepi);
+                }
             }
-
+            catch(Exception ex) {
+                System.Windows.MessageBox.Show("Database error in adding file name to database " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Remove_file() {
             String item = string.Empty;
+            String full_item = string.Empty;
+            String desktop_path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
             try {
-                string item = List_Files.SelectedItem.ToString();
+                item = List_Files.SelectedItem.ToString();
 
                 List_Files.Items.RemoveAt(List_Files.SelectedIndex);
             }
@@ -139,16 +139,24 @@ namespace Desktop_Cleaner {
                 Console.WriteLine(ex);
             }
 
+            full_item = desktop_path +'\\'+ item;
+            Console.WriteLine(full_item);
 
+            try {
+                using (SQLiteCommand cmd = new SQLiteCommand(sqlite_conn)) {
+
+                    cmd.CommandText = @"DELETE FROM File_names WHERE name = (@ime);";
+                    cmd.Parameters.AddWithValue("@ime",full_item );
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+            }catch (Exception ex) {
+                System.Windows.MessageBox.Show("Database error: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             //System.Windows.MessageBox.Show(item, "FileDialog Error", MessageBoxButton.OK, MessageBoxImage.Error);
-
-
-
         }
 
-
-        // more biti vzunaj da druga metoda to najde
-        SQLiteConnection sqlite_conn = null;
+        SQLiteConnection sqlite_conn = null;         // more biti vzunaj da druga metoda to najde
         private void Database_innit() {
             sqlite_conn = new SQLiteConnection("Data Source=../../Data/Data.db; Version = 3");
             try {
@@ -163,22 +171,80 @@ namespace Desktop_Cleaner {
             }
         }
 
-
         private void Listbox_innit() {
-
+            String Izpisi_v_listbox = String.Empty;
+            try {
+                using (SQLiteCommand cmd = new SQLiteCommand(@"SELECT * FROM File_names;", sqlite_conn)) {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader()) {
+                        while (rdr.Read()) {
+                            Izpisi_v_listbox = Refactor_string(rdr.GetString(0));
+                            List_Files.Items.Add(Izpisi_v_listbox);
+                            Console.WriteLine($"{rdr.GetString(0)}");
+                        }
+                    }
+                }
+            }catch(Exception ex){
+                System.Windows.MessageBox.Show("Database error in init write to listbox: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
         private String Refactor_string(String name) {
             string[] splitan = name.Split('\\');
             return splitan[4];
         }
 
+        int setting_stevilka;
+        private void CheckBox_set() {
+            try {
+                using (SQLiteCommand cmd = new SQLiteCommand(@"SELECT * FROM Settings WHERE ROWID = 1;", sqlite_conn)) {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader()) {
+                        while (rdr.Read()) {
+                            setting_stevilka = rdr.GetInt32(0);
+                        }
+                    }
+                }
+                if (setting_stevilka == 1) {
+                    Check_Box_Button.IsChecked = true;
+
+                } else {
+                    Check_Box_Button.IsChecked = false;
+                }
+            }
+            catch (Exception ex) {
+                System.Windows.MessageBox.Show("Check box set error: " + ex, "CheckBox load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
+        private void CheckBox_save() {
+
+            //TODO dubi vrednost check boxa in naredi sa v db shrani 0 ali 1 
+
+
+
+            try {
+                using (SQLiteCommand cmd = new SQLiteCommand(@"UPDATE Settings SET New_folder = 1 WHERE ROWID = 1;", sqlite_conn)) {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader()) {
+                        while (rdr.Read()) {
+                            setting_stevilka = rdr.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) {
+                System.Windows.MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void clean_desek() {
+            prog_bar.Visibility = Visibility.Visible;
 
 
 
 
+        }
 
         #endregion
-
 
     }
 }
