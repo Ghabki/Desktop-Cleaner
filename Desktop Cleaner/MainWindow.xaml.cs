@@ -217,22 +217,34 @@ namespace Desktop_Cleaner {
         }
 
         private void CheckBox_save() {
-
-            //TODO dubi vrednost check boxa in naredi sa v db shrani 0 ali 1 
-
-
-
-            try {
-                using (SQLiteCommand cmd = new SQLiteCommand(@"UPDATE Settings SET New_folder = 1 WHERE ROWID = 1;", sqlite_conn)) {
-                    using (SQLiteDataReader rdr = cmd.ExecuteReader()) {
-                        while (rdr.Read()) {
-                            setting_stevilka = rdr.GetInt32(0);
+            //TODO uredi database execution ker nerabim tega read pa to 
+            if (Check_Box_Button.IsChecked.Value) {
+                try {
+                    using (SQLiteCommand cmd = new SQLiteCommand(@"UPDATE Settings SET New_folder = 1 WHERE ROWID = 1;", sqlite_conn)) {
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader()) {
+                            while (rdr.Read()) {    //Tukaj uredi kodo
+                                setting_stevilka = rdr.GetInt32(0);
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception ex) {
-                System.Windows.MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                catch (Exception ex) {
+                    System.Windows.MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+            } else {
+                try {
+                    using (SQLiteCommand cmd = new SQLiteCommand(@"UPDATE Settings SET New_folder = 0 WHERE ROWID = 1;", sqlite_conn)) {
+                        using (SQLiteDataReader rdr = cmd.ExecuteReader()) {
+                            while (rdr.Read()) {
+                                setting_stevilka = rdr.GetInt32(0);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    System.Windows.MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
