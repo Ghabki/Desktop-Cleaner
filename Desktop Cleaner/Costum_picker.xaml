@@ -1,0 +1,21 @@
+﻿<Window x:Class="Desktop_Cleaner.Costum_picker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Desktop_Cleaner"
+        mc:Ignorable="d"
+        Title="Desktop Cleaner File Explorer" Height="387" Width="349" Background="#FF231E1E" Icon="Resources/Desktop.ico">
+    <Grid>
+        <Button x:Name="Dodaj" Content="Add" HorizontalAlignment="Left" Margin="240,65,0,0" VerticalAlignment="Top" Width="91" Height="70" FontSize="14" Click="Dodaj_Click"/>
+        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Left" Margin="240,210,0,0" VerticalAlignment="Top" Width="91" Height="60" FontSize="14" Click="Cancel_Click"/>
+        <ListView x:Name="lis" HorizontalAlignment="Left" Height="356" VerticalAlignment="Top" Width="235">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>

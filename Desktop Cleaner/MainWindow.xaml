@@ -7,9 +7,6 @@
         mc:Ignorable="d"
         Title="Desktop Cleaner" Height="300" Width="500" Background="#FF231E1E" Icon="Resources/Desktop.ico">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <ListBox x:Name="List_Files" HorizontalAlignment="left" Height="269" VerticalAlignment="Top" Width="252" Background="#FFE0E0E0"/>
         <CheckBox x:Name="Check_Box_Button" HorizontalAlignment="Left" Margin="301,147,0,0" VerticalAlignment="Top" Height="22" Width="138" Background="#FFB0B2B4" Foreground="#FFD8D8D8" FontSize="14" Content="Make new folder" />
         <Button x:Name="Clean_Button" Content="Clean" HorizontalAlignment="Left" Margin="301,198,0,0" VerticalAlignment="Top" Width="138" Height="47" Background="#FF0E4E7A" Foreground="#FFC5C5C5" FontSize="14" Click="Clean_Button_Click"/>

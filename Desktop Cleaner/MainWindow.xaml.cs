@@ -44,13 +44,16 @@ namespace Desktop_Cleaner {
         }
 
         private void Add_Button_Button_Click(object sender, RoutedEventArgs e) {
+            var window = new Costum_picker(povezava, delo); 
+            window.Show();
+
+
+
+            /*
             String File_name = String.Empty;
 
             try{
-                System.Windows.Forms.OpenFileDialog dlg = new System.Windows.Forms.OpenFileDialog {
-                    InitialDirectory = "Desktop"
-            };
-
+                
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     File_name = dlg.FileName;
                     System.Windows.MessageBox.Show(File_name);
@@ -59,7 +62,7 @@ namespace Desktop_Cleaner {
             }
             catch (Exception ex){
                 System.Windows.MessageBox.Show("FileDialog Error: " + ex, "FileDialog Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            }*/
         }
 
 
