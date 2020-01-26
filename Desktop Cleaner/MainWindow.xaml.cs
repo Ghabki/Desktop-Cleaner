@@ -45,9 +45,15 @@ namespace Desktop_Cleaner {
 
         private void Add_Button_Button_Click(object sender, RoutedEventArgs e) {
             var window = new Costum_picker(povezava, delo); 
-            window.Show();
+            window.ShowDialog();
+            List<string> daj_v_bazo = window.Vrni();
+            foreach (string item in daj_v_bazo)
+            {
+                Console.WriteLine(item);
+                Add_file(item);
 
-
+            }
+            
 
             /*
             String File_name = String.Empty;
@@ -85,7 +91,7 @@ namespace Desktop_Cleaner {
         #endregion
 
         #region Functions
-        private void Add_file(String file_name) {
+        public void Add_file(String file_name) {
             string prilepi = string.Empty;
 
             try {
@@ -210,6 +216,8 @@ namespace Desktop_Cleaner {
                 }
                 else
                 {
+
+
                     //naredi da napise v mapo ki je bila nazadnje uporabljena oziroma nazadnje narejena ali neki
                     Console.WriteLine("naredi da spravi v v prejšnjo mapo mapo");
                 }

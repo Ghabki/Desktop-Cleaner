@@ -1,17 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Desktop_Cleaner
 {
@@ -20,8 +9,8 @@ namespace Desktop_Cleaner
     /// </summary>
     public partial class Costum_picker : Window
     {
-        Podatki povezava;
-        Delo delo;
+        readonly Podatki povezava;
+        readonly Delo delo;
         public Costum_picker(Podatki abc, Delo abcd)
         {
 
@@ -32,36 +21,69 @@ namespace Desktop_Cleaner
 
         }
 
+        readonly List<string> _vrni = new List<string>();
+        List<string> podatki_za_primerjat = new List<string>();
+        readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+
+
+
         private void Dodaj_Click(object sender, RoutedEventArgs e)
         {
-            if (lis.SelectedItems.Count == 0)
+
+            try
             {
-                return;
+                if (lis.SelectedItems.Count == 0)
+                {
+                    System.Windows.MessageBox.Show("Nicesar nisi izbral","information", MessageBoxButton.OK, MessageBoxImage.Information);   
+                    return;
+                }
+
+                _vrni.Clear();
+                var selectedItems = lis.SelectedItems;
+                string izpis = "";
+                foreach (ListView_Data selectedItem in selectedItems)
+                {
+
+                    string name_of_file = selectedItem.Name;
+                    if (podatki_za_primerjat.Contains(name_of_file))
+                    {
+                        izpis += ("NI DODALO: " + name_of_file + "!\n");
+                        Console.WriteLine("ni dodano");
+                        if (lis.SelectedItems.Count == 1)
+                        {
+                            break;
+                        }
+          
+                    }
+                    else
+                    {
+                        izpis += ("OK: " + name_of_file + "!\n");
+
+                        name_of_file = path + "\\" + selectedItem.Name;
+
+                        podatki_za_primerjat.Add(name_of_file);
+                        _vrni.Add(name_of_file);
+                    }
+
+                    /*
+                     
+                     v database dodaj last used folder
+
+
+                     */
+
+
+                }
+                System.Windows.MessageBox.Show(izpis, "Informacije", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
-
-
-            var selectedItems = lis.SelectedItems;
-            foreach (ListView_Data selectedItem in selectedItems)
+            catch (Exception ex)
             {
-                /*
-                 Za vsak file preveri ce ni ze v database (naredi get pa set zato da drig class lahko to vzame, mogoce pa to ni niti potrebno ki lahko ze tle to naridm)
-                 nekatere datoteke so od windowsa pomembne in se jih nespme premikat ipo desktop.ini, za to dodaj exception
-                 v database dodaj last used folder
-                 
-                 
-                 */
 
-
-
-                string name_of_file = selectedItem.Name.ToString();
-                System.Windows.MessageBox.Show(name_of_file);
-
+                System.Windows.MessageBox.Show("Item Add Error: " + ex, "Item Add Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.Close();
             }
-
-
-
-
-
 
 
 
@@ -74,11 +96,35 @@ namespace Desktop_Cleaner
             this.Close();
         }
 
+        public List<string> Vrni()
+        {
+            return _vrni;
+        }
+
 
 
         private void ListView_Init()
         {
-            lis.ItemsSource = delo.Datoteke_namizje();
+            try
+            {
+                foreach (string stvar in povezava.Vrni_vse())
+                {
+                    podatki_za_primerjat.Add(delo.Refactor_string(stvar));
+
+                }
+
+                List<ListView_Data> abc = delo.Datoteke_namizje();
+                lis.ItemsSource = abc;
+
+            }
+            catch (Exception ex)
+            {
+
+                System.Windows.MessageBox.Show("ListtView_innit Error: " + ex, "ListtView_innit Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+
+
         }
     }
 }

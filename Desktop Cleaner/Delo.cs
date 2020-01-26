@@ -24,32 +24,71 @@ namespace Desktop_Cleaner
             DirectoryInfo namizje_a = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             DirectoryInfo namizje_b = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
 
+            Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
+
             try
             {
                 foreach (var file in namizje_a.GetFiles())
                 {
                     string file_a = file.ToString();
-                    stvari.Add(new ListView_Data() { Name = file_a });
+                    if (file_a== "desktop.ini")
+                    {
+                        
+                    }
+                    else
+                    {
+                        stvari.Add(new ListView_Data() { Name = file_a });
+
+                    }
 
                 }
 
                 foreach (var file in namizje_a.GetDirectories())
                 {
                     string file_a = file.ToString();
-                    stvari.Add(new ListView_Data() { Name = file_a });
+                    if (file_a == "desktop.ini")
+                    {
+
+                    }
+                    else
+                    {
+                        stvari.Add(new ListView_Data() { Name = file_a });
+
+                    }
+
 
                 }
 
                 foreach (var file in namizje_b.GetFiles())
                 {
+
                     string file_b = file.ToString();
-                    stvari.Add(new ListView_Data() { Name = file_b });
+                    if (file_b == "desktop.ini")
+                    {
+
+                    }
+                    else
+                    {
+                        stvari.Add(new ListView_Data() { Name = file_b });
+
+                    }
+
                 }
 
                 foreach (var file in namizje_b.GetDirectories())
                 {
                     string file_b = file.ToString();
-                    stvari.Add(new ListView_Data() { Name = file_b });
+                    if (file_b == "desktop.ini")
+                    {
+
+                    }
+                    else
+                    {
+                        stvari.Add(new ListView_Data() { Name = file_b });
+
+                    }
+
 
                 }
                 return stvari;

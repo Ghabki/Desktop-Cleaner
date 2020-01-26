@@ -127,5 +127,36 @@ namespace Desktop_Cleaner
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public string Vrni_zadnjo_mapo()
+        {
+            return "";
+        }
+
+        public void Dodaj_zadnjo_mapo(string ime)
+        {
+            using (SQLiteCommand cmd = new SQLiteCommand(sqlite_conn))
+            {
+                cmd.CommandText = @"INSERT INTO File_names (name) VALUES (@datoteka);";
+                cmd.Parameters.AddWithValue("@datoteka", ime);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+
+        }
+
+        //todo lahko naredis da se datoteke pravilno formatirane vrnejo uz tle
+
+
+
+
+
+
     }
+
+
+
+
+
+
 }
