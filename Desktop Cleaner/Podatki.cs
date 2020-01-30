@@ -9,7 +9,7 @@ namespace Desktop_Cleaner
     {
 
         SQLiteConnection sqlite_conn = null;
-        Delo delo = null;
+        Delo delo;
         public Podatki()
         {
             try
@@ -130,15 +130,26 @@ namespace Desktop_Cleaner
 
         public string Vrni_zadnjo_mapo()
         {
-            return "";
+            using (SQLiteCommand cmd = new SQLiteCommand(@"SELECT * FROM Folder WHERE ROWID = 1;", sqlite_conn))
+            {
+                using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        string mapa = rdr.GetString(0);
+                        return mapa;
+                    }
+                    return ("");
+                }
+            }
         }
 
         public void Dodaj_zadnjo_mapo(string ime)
         {
             using (SQLiteCommand cmd = new SQLiteCommand(sqlite_conn))
             {
-                cmd.CommandText = @"INSERT INTO File_names (name) VALUES (@datoteka);";
-                cmd.Parameters.AddWithValue("@datoteka", ime);
+                cmd.CommandText = @"UPDATE Settings SET New_folder = (@ime) WHERE ROWID = 1;";
+                cmd.Parameters.AddWithValue("@ime", ime);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();
             }

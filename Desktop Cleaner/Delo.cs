@@ -23,6 +23,9 @@ namespace Desktop_Cleaner
 
             DirectoryInfo namizje_a = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             DirectoryInfo namizje_b = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
+            string path1 = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\";
+            string path2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory) + "\\";
+
 
             Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
@@ -34,12 +37,10 @@ namespace Desktop_Cleaner
                     string file_a = file.ToString();
                     if (file_a== "desktop.ini")
                     {
-                        
                     }
                     else
                     {
                         stvari.Add(new ListView_Data() { Name = file_a });
-
                     }
 
                 }
@@ -53,11 +54,8 @@ namespace Desktop_Cleaner
                     }
                     else
                     {
-                        stvari.Add(new ListView_Data() { Name = file_a });
-
+                        stvari.Add(new ListView_Data() {Name = file_a});
                     }
-
-
                 }
 
                 foreach (var file in namizje_b.GetFiles())
@@ -66,14 +64,11 @@ namespace Desktop_Cleaner
                     string file_b = file.ToString();
                     if (file_b == "desktop.ini")
                     {
-
                     }
                     else
                     {
-                        stvari.Add(new ListView_Data() { Name = file_b });
-
+                        stvari.Add(new ListView_Data() {Name = file_b + " (((PUBLIC)))"});
                     }
-
                 }
 
                 foreach (var file in namizje_b.GetDirectories())
@@ -81,15 +76,11 @@ namespace Desktop_Cleaner
                     string file_b = file.ToString();
                     if (file_b == "desktop.ini")
                     {
-
                     }
                     else
                     {
-                        stvari.Add(new ListView_Data() { Name = file_b });
-
+                        stvari.Add(new ListView_Data() { Name = file_b+" (((PUBLIC)))" });
                     }
-
-
                 }
                 return stvari;
             }
@@ -100,6 +91,20 @@ namespace Desktop_Cleaner
             }
             
         }
+
+
+        public bool User_public_check (string vnos)    //todo ce bo kaksna napaka z tem da gre cez string al neki ker je pac 12 mest je tole problem in se more spremeniti
+        {
+            string rezul = vnos.Substring(vnos.Length - 12);
+
+            if (rezul == "(((PUBLIC)))")
+            {
+                return true;
+            }
+            return false;
+        }
+
+
 
     }
     //ta class narejen je tukaj samo da je olajsano ce zelim se kej dodati v listview

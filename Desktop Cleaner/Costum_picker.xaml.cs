@@ -24,7 +24,7 @@ namespace Desktop_Cleaner
         readonly List<string> _vrni = new List<string>();
         List<string> podatki_za_primerjat = new List<string>();
         readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
+        readonly string path2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
 
 
 
@@ -35,7 +35,7 @@ namespace Desktop_Cleaner
             {
                 if (lis.SelectedItems.Count == 0)
                 {
-                    System.Windows.MessageBox.Show("Nicesar nisi izbral","information", MessageBoxButton.OK, MessageBoxImage.Information);   
+                    MessageBox.Show("Nicesar nisi izbral","information", MessageBoxButton.OK, MessageBoxImage.Information);   
                     return;
                 }
 
@@ -54,18 +54,24 @@ namespace Desktop_Cleaner
                         {
                             break;
                         }
-          
                     }
                     else
                     {
                         izpis += ("OK: " + name_of_file + "!\n");
-
-                        name_of_file = path + "\\" + selectedItem.Name;
-
                         podatki_za_primerjat.Add(name_of_file);
+                        if (delo.User_public_check(name_of_file))
+                        {
+                            name_of_file = path2 + "\\" + selectedItem.Name;
+                        }
+                        else
+                        {
+                            name_of_file = path + "\\" + selectedItem.Name;
+                        }
+
+
+
                         _vrni.Add(name_of_file);
                     }
-
                     /*
                      
                      v database dodaj last used folder
@@ -73,22 +79,16 @@ namespace Desktop_Cleaner
 
                      */
 
-
                 }
-                System.Windows.MessageBox.Show(izpis, "Informacije", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(izpis, "Informacije", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
             catch (Exception ex)
             {
 
-                System.Windows.MessageBox.Show("Item Add Error: " + ex, "Item Add Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Item Add Error: " + ex, "Item Add Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 this.Close();
             }
-
-
-
-
-
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -100,7 +100,6 @@ namespace Desktop_Cleaner
         {
             return _vrni;
         }
-
 
 
         private void ListView_Init()
@@ -120,7 +119,7 @@ namespace Desktop_Cleaner
             catch (Exception ex)
             {
 
-                System.Windows.MessageBox.Show("ListtView_innit Error: " + ex, "ListtView_innit Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("ListtView_innit Error: " + ex, "ListtView_innit Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
 

@@ -17,7 +17,7 @@ using System.Data.SQLite;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using System.IO;
-
+// todo pretvori vse v angleščino ali v slovenpščino
 namespace Desktop_Cleaner {
     public partial class MainWindow : Window {
         #region Window
@@ -29,6 +29,8 @@ namespace Desktop_Cleaner {
         #endregion
 
         readonly string desktop_path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+        readonly string public_path = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
 
         #region Button_clicks
         private void Clean_Button_Click(object sender, RoutedEventArgs e) {
@@ -51,24 +53,7 @@ namespace Desktop_Cleaner {
             {
                 Console.WriteLine(item);
                 Add_file(item);
-
             }
-            
-
-            /*
-            String File_name = String.Empty;
-
-            try{
-                
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                    File_name = dlg.FileName;
-                    System.Windows.MessageBox.Show(File_name);
-                    Add_file(File_name);
-                }
-            }
-            catch (Exception ex){
-                System.Windows.MessageBox.Show("FileDialog Error: " + ex, "FileDialog Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }*/
         }
 
 
@@ -76,8 +61,8 @@ namespace Desktop_Cleaner {
 
         #endregion
 
-        Podatki povezava = null;
-        Delo delo = null;
+        Podatki povezava ;
+        Delo delo ;
         #region Init
         
         private void Init() {
@@ -107,19 +92,27 @@ namespace Desktop_Cleaner {
 
         private void Remove_file() {
             String item = string.Empty;
-            String full_item = string.Empty;
-
-            try {
+            try
+            {
                 item = List_Files.SelectedItem.ToString();
 
                 List_Files.Items.RemoveAt(List_Files.SelectedIndex);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 System.Windows.MessageBox.Show("You need to select a line to delete it.", "Reminder", MessageBoxButton.OK, MessageBoxImage.Information);
                 Console.WriteLine(ex);
             }
 
-            full_item = desktop_path +'\\'+ item;
+            string full_item;
+            if (delo.User_public_check(item))
+            {
+                full_item = public_path + '\\' + item;
+            }
+            else
+            {
+                full_item = desktop_path + '\\' + item; // 
+            }
             Console.WriteLine(full_item); // tole se izbrise iz database
 
             try {
@@ -167,7 +160,6 @@ namespace Desktop_Cleaner {
         }
 
         private void CheckBox_save() {
-            //TODO uredi database execution ker nerabim tega read pa to 
             if (Check_Box_Button.IsChecked.Value) {
                 try {
                     povezava.Update_settings(1);
@@ -205,7 +197,7 @@ namespace Desktop_Cleaner {
                 if (Check_Box_Button.IsChecked == true)
                 {
                     int i = 0;
-                    string nova_mapa = "Nova mapa";
+                    const string nova_mapa = "Nova_mapa";
                     string current = System.IO.Path.Combine(desktop_path, nova_mapa);
 
                     while (Directory.Exists(current)) {
@@ -213,6 +205,7 @@ namespace Desktop_Cleaner {
                         current = String.Format("{0} {1}", nova_mapa, i);
                     }
                     Directory.CreateDirectory(System.IO.Path.Combine(desktop_path, current));
+                    povezava.Dodaj_zadnjo_mapo(current);
                 }
                 else
                 {
