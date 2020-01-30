@@ -56,9 +56,6 @@ namespace Desktop_Cleaner {
             }
         }
 
-
-
-
         #endregion
 
         Podatki povezava ;
@@ -192,8 +189,13 @@ namespace Desktop_Cleaner {
 
             lahko naredis da je spremenljivka za desktop path global ker se jo pac dostikrat uporabi
              */
+            string prejšnja_mapa;
             try
             {
+                prejšnja_mapa = povezava.Vrni_zadnjo_mapo();
+
+
+
                 if (Check_Box_Button.IsChecked == true)
                 {
                     int i = 0;
@@ -205,11 +207,15 @@ namespace Desktop_Cleaner {
                         current = String.Format("{0} {1}", nova_mapa, i);
                     }
                     Directory.CreateDirectory(System.IO.Path.Combine(desktop_path, current));
-                    povezava.Dodaj_zadnjo_mapo(current);
+                    povezava.Dodaj_zadnjo_mapo(current);// todo izpiši na okence da je spravilo v to mapo da uporabnik ve
+                    //todo metoda za premik podatkov
                 }
                 else
                 {
-
+                    if (prejšnja_mapa=="")
+                    {
+                        //todo isto kot zgoraj metoda za premik podatkov
+                    }
 
                     //naredi da napise v mapo ki je bila nazadnje uporabljena oziroma nazadnje narejena ali neki
                     Console.WriteLine("naredi da spravi v v prejšnjo mapo mapo");
