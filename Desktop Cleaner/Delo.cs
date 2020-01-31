@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desktop_Cleaner
 {
     public class Delo
     {
-        public String Refactor_string(String name)
+        readonly string _path1;
+        readonly string _path2;
+
+        public Delo(string p1, string p2)
+        {
+            _path1 = p1;
+            _path2 = p2;
+
+        }
+
+
+        public string Refactor_string(string name)
         {
             string[] splitan = name.Split('\\');
             return splitan[4];
@@ -21,14 +29,12 @@ namespace Desktop_Cleaner
             List<ListView_Data> stvari = new List<ListView_Data>();
 
 
-            DirectoryInfo namizje_a = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            DirectoryInfo namizje_b = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
-            string path1 = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\";
-            string path2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory) + "\\";
+            DirectoryInfo namizje_a = new DirectoryInfo(_path1);
+            DirectoryInfo namizje_b = new DirectoryInfo(_path2);
 
 
-            Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
+            //Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            //Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
 
             try
             {
@@ -97,14 +103,8 @@ namespace Desktop_Cleaner
         {
             string rezul = vnos.Substring(vnos.Length - 12);
 
-            if (rezul == "(((PUBLIC)))")
-            {
-                return true;
-            }
-            return false;
+            return rezul == "(((PUBLIC)))";   // basicly ce je public vrne true ce pa ni vrne false
         }
-
-
 
     }
     //ta class narejen je tukaj samo da je olajsano ce zelim se kej dodati v listview

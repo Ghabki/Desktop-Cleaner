@@ -4,9 +4,6 @@ using System.Windows;
 
 namespace Desktop_Cleaner
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
     public partial class Costum_picker : Window
     {
         readonly Podatki povezava;
@@ -68,8 +65,6 @@ namespace Desktop_Cleaner
                             name_of_file = path + "\\" + selectedItem.Name;
                         }
 
-
-
                         _vrni.Add(name_of_file);
                     }
                     /*
@@ -87,7 +82,7 @@ namespace Desktop_Cleaner
             {
 
                 MessageBox.Show("Item Add Error: " + ex, "Item Add Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Close();
+                Close();
             }
         }
 
@@ -127,8 +122,4 @@ namespace Desktop_Cleaner
         }
     }
 }
-
-
-
-//class narejen samo ce zelim se kaksne podatke dati v listview je lazje
 

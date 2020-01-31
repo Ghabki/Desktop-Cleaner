@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using System.Data.SQLite;
-using Microsoft.Win32;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows;
 // todo pretvori vse v angleščino ali v slovenpščino
-namespace Desktop_Cleaner {
-    public partial class MainWindow : Window {
+namespace Desktop_Cleaner
+{
+    public partial class MainWindow
+    {
         #region Window
 
         public MainWindow() {
@@ -28,9 +15,9 @@ namespace Desktop_Cleaner {
         }
         #endregion
 
-        readonly string desktop_path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        readonly string _desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-        readonly string public_path = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
+        readonly string _publicPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
 
         #region Button_clicks
         private void Clean_Button_Click(object sender, RoutedEventArgs e) {
@@ -60,11 +47,13 @@ namespace Desktop_Cleaner {
 
         Podatki povezava ;
         Delo delo ;
+
         #region Init
         
         private void Init() {
+            delo = new Delo(_desktopPath, _publicPath);
             povezava = new Podatki();
-            delo = new Delo();
+
 
             Listbox_innit();
             CheckBox_set();
@@ -73,8 +62,8 @@ namespace Desktop_Cleaner {
         #endregion
 
         #region Functions
-        public void Add_file(String file_name) {
-            string prilepi = string.Empty;
+        public void Add_file(string file_name) {
+            string prilepi;
 
             try {
                 povezava.Dodaj(file_name);
@@ -83,12 +72,12 @@ namespace Desktop_Cleaner {
                 List_Files.Items.Add(prilepi); 
             }
             catch(Exception ex) {
-                System.Windows.MessageBox.Show("Database error in adding file name to database " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Database error in adding file name to database " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void Remove_file() {
-            String item = string.Empty;
+            string item = string.Empty;
             try
             {
                 item = List_Files.SelectedItem.ToString();
@@ -104,25 +93,25 @@ namespace Desktop_Cleaner {
             string full_item;
             if (delo.User_public_check(item))
             {
-                full_item = public_path + '\\' + item;
+                full_item = _publicPath + '\\' + item;
             }
             else
             {
-                full_item = desktop_path + '\\' + item; // 
+                full_item = _desktopPath + '\\' + item; // 
             }
             Console.WriteLine(full_item); // tole se izbrise iz database
 
             try {
                 povezava.Izbrisi(full_item);
             }catch (Exception ex) {
-                System.Windows.MessageBox.Show("Database error: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Database error: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             //System.Windows.MessageBox.Show(item, "FileDialog Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void Listbox_innit()
         {
-            List<string> datoteke = new List<string>();
+            List<string> datoteke;
             try
             {
                 datoteke = povezava.Vrni_vse();
@@ -135,15 +124,15 @@ namespace Desktop_Cleaner {
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Database error in init write to listbox: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Database error in init write to listbox: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private int setting_stevilka;
+        private int _settingStevilka;
         private void CheckBox_set() {
             try {
-                setting_stevilka = povezava.Select_Settings();
-                if (setting_stevilka == 1) {
+                _settingStevilka = povezava.Select_Settings();
+                if (_settingStevilka == 1) {
                     Check_Box_Button.IsChecked = true;
 
                 } else {
@@ -151,7 +140,7 @@ namespace Desktop_Cleaner {
                 }
             }
             catch (Exception ex) {
-                System.Windows.MessageBox.Show("Check box set error: " + ex, "CheckBox load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Check box set error: " + ex, "CheckBox load Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
@@ -162,7 +151,7 @@ namespace Desktop_Cleaner {
                     povezava.Update_settings(1);
                 }
                 catch (Exception ex) {
-                    System.Windows.MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
             } else {
@@ -171,7 +160,7 @@ namespace Desktop_Cleaner {
 
                 }
                 catch (Exception ex) {
-                    System.Windows.MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -200,13 +189,13 @@ namespace Desktop_Cleaner {
                 {
                     int i = 0;
                     const string nova_mapa = "Nova_mapa";
-                    string current = System.IO.Path.Combine(desktop_path, nova_mapa);
+                    string current = Path.Combine(_desktopPath, nova_mapa);
 
                     while (Directory.Exists(current)) {
                         i++;
                         current = String.Format("{0} {1}", nova_mapa, i);
                     }
-                    Directory.CreateDirectory(System.IO.Path.Combine(desktop_path, current));
+                    Directory.CreateDirectory(System.IO.Path.Combine(_desktopPath, current));
                     povezava.Dodaj_zadnjo_mapo(current);// todo izpiši na okence da je spravilo v to mapo da uporabnik ve
                     //todo metoda za premik podatkov
                 }
@@ -231,7 +220,7 @@ namespace Desktop_Cleaner {
             int a = 0;
 
             String[] cars;
-            DirectoryInfo d = new DirectoryInfo(desktop_path);
+            DirectoryInfo d = new DirectoryInfo(_desktopPath);
             DirectoryInfo b = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
 
             foreach (var file in b.GetFiles())
