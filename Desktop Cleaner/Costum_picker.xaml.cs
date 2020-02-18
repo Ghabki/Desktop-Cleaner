@@ -18,7 +18,7 @@ namespace Desktop_Cleaner
 
         }
 
-        readonly List<string> _vrni = new List<string>();
+        List<string> _vrni = new List<string>();
         List<string> podatki_za_primerjat = new List<string>();
         readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         readonly string path2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
@@ -36,7 +36,7 @@ namespace Desktop_Cleaner
                     return;
                 }
 
-                _vrni.Clear();
+                //_vrni.Clear();
                 var selectedItems = lis.SelectedItems;
                 string izpis = "";
                 foreach (ListView_Data selectedItem in selectedItems)
@@ -67,13 +67,6 @@ namespace Desktop_Cleaner
 
                         _vrni.Add(name_of_file);
                     }
-                    /*
-                     
-                     v database dodaj last used folder
-
-
-                     */
-
                 }
                 MessageBox.Show(izpis, "Informacije", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -94,6 +87,12 @@ namespace Desktop_Cleaner
         public List<string> Vrni()
         {
             return _vrni;
+            
+        }
+
+        public void resetList()
+        {
+            _vrni.Clear();
         }
 
 

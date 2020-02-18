@@ -35,7 +35,8 @@ namespace Desktop_Cleaner
         private void Add_Button_Button_Click(object sender, RoutedEventArgs e) {
             var window = new Costum_picker(povezava, delo); 
             window.ShowDialog();
-            List<string> daj_v_bazo = window.Vrni();
+            List<string> daj_v_bazo = new List<string>(window.Vrni()); // mores drugace prekopirat list ker cene kazalci zbrijeso iz obeh
+            window.resetList();
             foreach (string item in daj_v_bazo)
             {
                 Console.WriteLine(item);
@@ -204,7 +205,6 @@ namespace Desktop_Cleaner
                 Console.WriteLine("napaka pri kreiranju mape na " + ex);
             }
         }
-
 
         private void premik(string kam)
         {
