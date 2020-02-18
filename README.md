@@ -2,4 +2,4 @@
 Desktop clean-up
 
 
-Ne dela
+Ne dela še
