@@ -112,7 +112,7 @@ namespace Desktop_Cleaner
         {
             using (SQLiteCommand cmd = new SQLiteCommand(_sqliteConn))
             {
-                cmd.CommandText = @"UPDATE Settings SET New_folder = (@ime) WHERE ROWID = 1;";
+                cmd.CommandText = @"UPDATE Folder SET last_folder = (@ime) WHERE ROWID = 1;";
                 cmd.Parameters.AddWithValue("@ime", ime);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();

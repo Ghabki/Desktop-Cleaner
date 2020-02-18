@@ -54,7 +54,6 @@ namespace Desktop_Cleaner
             delo = new Delo(_desktopPath, _publicPath);
             povezava = new Podatki();
 
-
             Listbox_innit();
             CheckBox_set();
         }
@@ -167,86 +166,111 @@ namespace Desktop_Cleaner
 
         private void Clean_desek()
         {
-            prog_bar.Visibility = Visibility.Visible;
-            //CheckBox_save();
-            // mogoce 3 arraye buu
-            /*
-             prvo naredi da naradi novi file ali ne 
-             probaj naredit z threadom
-             mogoce dodaj okno za kako da je ime filu ? ali pa ne zato da je hitreje in izi
-
-
-            lahko naredis da je spremenljivka za desktop path global ker se jo pac dostikrat uporabi
-             */
-            string prejšnja_mapa;
             try
             {
-                prejšnja_mapa = povezava.Vrni_zadnjo_mapo();
-
-
 
                 if (Check_Box_Button.IsChecked == true)
                 {
-                    int i = 0;
-                    const string nova_mapa = "Nova_mapa";
-                    string current = Path.Combine(_desktopPath, nova_mapa);
+                    string ime_mape = delo.Check_map();
+                    Directory.CreateDirectory(Path.Combine(_desktopPath, ime_mape));
+                    povezava.Dodaj_zadnjo_mapo(ime_mape);
+                    Console.WriteLine("!!!!!!!!!!!!!!!!!!!!"+ime_mape);
 
-                    while (Directory.Exists(current)) {
-                        i++;
-                        current = String.Format("{0} {1}", nova_mapa, i);
-                    }
-                    Directory.CreateDirectory(System.IO.Path.Combine(_desktopPath, current));
-                    povezava.Dodaj_zadnjo_mapo(current);// todo izpiši na okence da je spravilo v to mapo da uporabnik ve
-                    //todo metoda za premik podatkov
+                    premik(ime_mape);
+                    //todo metoda za premik podatkov in    izpiši na okence da je spravilo v to mapo da uporabnik ve
                 }
                 else
                 {
-                    if (prejšnja_mapa=="")
+                    string prejšnja_mapa = povezava.Vrni_zadnjo_mapo();
+                    
+                    if (prejšnja_mapa=="" || !Directory.Exists(prejšnja_mapa))
                     {
-                        //todo isto kot zgoraj metoda za premik podatkov
+                        string ime_mape = delo.Check_map();
+                        Directory.CreateDirectory(Path.Combine(_desktopPath, ime_mape));
+                        povezava.Dodaj_zadnjo_mapo(ime_mape);
+                        premik(ime_mape);
+                    }
+                    else
+                    {
+                        
+                        string map_path = Path.Combine(_desktopPath, prejšnja_mapa);
+                        premik(map_path);
                     }
 
                     //naredi da napise v mapo ki je bila nazadnje uporabljena oziroma nazadnje narejena ali neki
                     Console.WriteLine("naredi da spravi v v prejšnjo mapo mapo");
                 }
-            }catch(Exception){
-                Console.WriteLine("napaka pri kreiranju mape na ");
+            }catch(Exception ex){
+                Console.WriteLine("napaka pri kreiranju mape na " + ex);
             }
-
-
-
-
-
-            int a = 0;
-
-            String[] cars;
-            DirectoryInfo d = new DirectoryInfo(_desktopPath);
-            DirectoryInfo b = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory));
-
-            foreach (var file in b.GetFiles())
-            {
-                Console.WriteLine(file);
-                a++;
-
-                //Podatki.zacetek();
-            }
-            /*
-            foreach (var file in d.GetFiles()){
-                Console.WriteLine(file);
-                a++;
-                
-
-            }
-            foreach (var file in d.GetDirectories())
-            {
-                Console.WriteLine(file);
-                a++;
-                
-
-
-            }*/
-            Console.WriteLine(a);
         }
+
+
+        private void premik(string kam)
+        {
+            List<string> namizje = new List<string>();
+
+            List<string> ne_premikat;
+
+            try
+            {
+
+                string che;
+                foreach (var nam in delo.Datoteke_namizje())
+                {
+                    che = nam.Name;
+                    Console.WriteLine(che);
+                    if (delo.User_public_check(che))
+                    {
+                        namizje.Add(_publicPath + "\\" + che.Remove(che.Length - 13));// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
+                    }
+                    else
+                    {
+                        namizje.Add(_desktopPath + "\\"+ nam.Name);// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
+                    }
+
+                }
+                ne_premikat = povezava.Vrni_vse();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Neki ne dela v premiku" + ex, "Move error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            }
+
+
+            foreach (string last in namizje)
+            {
+                FileAttributes attr = File.GetAttributes(last);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    Console.WriteLine("To je directory"+ last);
+
+                    //todo nice semalo
+                    //MessageBox.Show("Its a directory");
+                }
+                else
+                {
+                    Console.WriteLine("To je file" +last);
+                    //MessageBox.Show("Its a file");
+
+                }
+
+            }
+
+
+
+
+            
+
+
+
+        }
+
+
+
+
         #endregion
 
     }

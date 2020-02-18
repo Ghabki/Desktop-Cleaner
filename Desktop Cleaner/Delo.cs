@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Desktop_Cleaner
 {
@@ -95,16 +96,42 @@ namespace Desktop_Cleaner
 
                 throw;
             }
-            
         }
 
 
-        public bool User_public_check (string vnos)    //todo ce bo kaksna napaka z tem da gre cez string al neki ker je pac 12 mest je tole problem in se more spremeniti
+        public bool User_public_check (string vnos)    //todo ce bo kaksna napaka z tem da gre cez string al neki ker je pac 12 mest je tole problem in se more spremeniti     (!!!rešeno)
         {
-            string rezul = vnos.Substring(vnos.Length - 12);
+            try
+            {
+                string rezul = vnos.Substring(vnos.Length - 12);
 
-            return rezul == "(((PUBLIC)))";   // basicly ce je public vrne true ce pa ni vrne false
+                return rezul == "(((PUBLIC)))";
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+               // basicly ce je public vrne true ce pa ni vrne false
         }
+
+
+        public string Check_map()
+        {
+            int i = 0;
+            const string nova_mapa = "Nova_mapa";
+            string current = Path.Combine(_path1, nova_mapa);
+
+            while (Directory.Exists(current))
+            {
+                i++;
+                current = Path.Combine(_path1, String.Format("{0} {1}", nova_mapa, i));
+            }
+
+            return current;
+
+        }
+
 
     }
     //ta class narejen je tukaj samo da je olajsano ce zelim se kej dodati v listview
