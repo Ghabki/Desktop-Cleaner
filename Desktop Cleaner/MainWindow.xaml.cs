@@ -210,13 +210,13 @@ namespace Desktop_Cleaner
         {
             List<string> namizje = new List<string>();
 
-            List<string> ne_premikat;
+            List<string> ne_premikat = null;
 
             try
             {
 
                 string che;
-                foreach (var nam in delo.Datoteke_namizje())
+                foreach (var nam in delo.Datoteke_namizje())// to do tukaj naredui nekaj da prepreci null
                 {
                     che = nam.Name;
                     Console.WriteLine(che);
@@ -245,15 +245,45 @@ namespace Desktop_Cleaner
                 FileAttributes attr = File.GetAttributes(last);
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
-                    Console.WriteLine("To je directory"+ last);
 
-                    //todo nice semalo
+                    if (ne_premikat ==null)
+                    {
+                        continue;// todo naredi da ce slucajno ne premakne nic da tudi napise da ni nic premakniilo ali neki
+                        
+                    }
+                    if (!ne_premikat.Contains(last))
+                    {
+                        try
+                        {
+                            Directory.Move(last, kam);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
                     //MessageBox.Show("Its a directory");
                 }
                 else
                 {
-                    Console.WriteLine("To je file" +last);
-                    //MessageBox.Show("Its a file");
+                    if (ne_premikat == null)
+                    {
+                        continue;// todo naredi da ce slucajno ne premakne nic da tudi napise da ni nic premakniilo ali neki
+
+                    }
+                    if (!ne_premikat.Contains(last))
+                    {
+                        try
+                        {
+                            File.Move(last, kam);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                    }
+
 
                 }
 

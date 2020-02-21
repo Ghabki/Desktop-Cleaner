@@ -108,11 +108,11 @@ namespace Desktop_Cleaner
                 return rezul == "(((PUBLIC)))";
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return false;
+                return false;       // basicly ce je public vrne true ce pa ni vrne false
             }
-               // basicly ce je public vrne true ce pa ni vrne false
+               
         }
 
 
