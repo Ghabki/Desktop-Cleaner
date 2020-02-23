@@ -11,8 +11,9 @@ This cleaner app makes it easy to "remove"(it moves all files and directoris to 
 - This app is not tested and in some circumstances it can corrupt files or diretories on desktop screen.
 - The code needs a lot of refractoring.
 - The app was designed and coded without planing.
+- Needs some corrections for database, soo it can be published.
 
 # Possible upcoming features
 - Speed
 - Loading bar to se progress of moving files and directories
-- design
+- Design
