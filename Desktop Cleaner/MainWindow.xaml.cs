@@ -173,9 +173,10 @@ namespace Desktop_Cleaner
                 if (Check_Box_Button.IsChecked == true)
                 {
                     string ime_mape = delo.Check_map();
-                    Directory.CreateDirectory(Path.Combine(_desktopPath, ime_mape));
+                    ime_mape = Path.Combine(_desktopPath, ime_mape); // Directory.CreateDirectory(<------------
+                    Directory.CreateDirectory(ime_mape);
                     povezava.Dodaj_zadnjo_mapo(ime_mape);
-                    Console.WriteLine("!!!!!!!!!!!!!!!!!!!!"+ime_mape);
+                    Console.WriteLine("!!!!!"+ime_mape);
 
                     premik(ime_mape);
                     //todo metoda za premik podatkov in    izpiši na okence da je spravilo v to mapo da uporabnik ve
@@ -187,7 +188,9 @@ namespace Desktop_Cleaner
                     if (prejšnja_mapa=="" || !Directory.Exists(prejšnja_mapa))
                     {
                         string ime_mape = delo.Check_map();
-                        Directory.CreateDirectory(Path.Combine(_desktopPath, ime_mape));
+                        ime_mape = Path.Combine(_desktopPath, ime_mape);
+                        Directory.CreateDirectory(ime_mape);
+
                         povezava.Dodaj_zadnjo_mapo(ime_mape);
                         premik(ime_mape);
                     }
@@ -195,6 +198,7 @@ namespace Desktop_Cleaner
                     {
                         
                         string map_path = Path.Combine(_desktopPath, prejšnja_mapa);
+                        Directory.CreateDirectory(map_path);
                         premik(map_path);
                     }
 
@@ -209,7 +213,6 @@ namespace Desktop_Cleaner
         private void premik(string kam)
         {
             List<string> namizje = new List<string>();
-
             List<string> ne_premikat = null;
 
             try
@@ -219,7 +222,7 @@ namespace Desktop_Cleaner
                 foreach (var nam in delo.Datoteke_namizje())// to do tukaj naredui nekaj da prepreci null
                 {
                     che = nam.Name;
-                    Console.WriteLine(che);
+                    Console.WriteLine(che); 
                     if (delo.User_public_check(che))
                     {
                         namizje.Add(_publicPath + "\\" + che.Remove(che.Length - 13));// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
@@ -231,6 +234,7 @@ namespace Desktop_Cleaner
 
                 }
                 ne_premikat = povezava.Vrni_vse();
+                ne_premikat.Add(kam);
 
             }
             catch (Exception ex)
@@ -255,7 +259,11 @@ namespace Desktop_Cleaner
                     {
                         try
                         {
-                            Directory.Move(last, kam);
+                            Console.WriteLine(last + "\\" + " " + kam+"\\"+delo.Refactor_string(last)); 
+                            
+
+                            Directory.Move(last, kam + "\\" + delo.Refactor_string(last));
+                            //Directory.Move(last, kam);
                         }
                         catch (Exception e)
                         {
@@ -276,7 +284,9 @@ namespace Desktop_Cleaner
                     {
                         try
                         {
-                            File.Move(last, kam);
+                            
+
+                            File.Move(last, kam+"\\"+delo.Refactor_string(last)); 
                         }
                         catch (Exception e)
                         {
@@ -288,20 +298,7 @@ namespace Desktop_Cleaner
                 }
 
             }
-
-
-
-
-            
-
-
-
         }
-
-
-
-
         #endregion
-
     }
 }

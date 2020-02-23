@@ -24,7 +24,6 @@ namespace Desktop_Cleaner
         readonly string path2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
 
 
-
         private void Dodaj_Click(object sender, RoutedEventArgs e)
         {
 
