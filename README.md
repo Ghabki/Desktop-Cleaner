@@ -17,3 +17,7 @@ This cleaner app makes it easy to "remove"(it moves all files and directoris to 
 - Speed
 - Loading bar to se progress of moving files and directories
 - Design
+
+
+
+Add nuget packet System.Data.Sqlite
