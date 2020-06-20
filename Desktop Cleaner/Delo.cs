@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Desktop_Cleaner
 {
@@ -42,7 +41,7 @@ namespace Desktop_Cleaner
                 foreach (var file in namizje_a.GetFiles())
                 {
                     string file_a = file.ToString();
-                    if (file_a== "desktop.ini")
+                    if (file_a == "desktop.ini")
                     {
                     }
                     else
@@ -61,7 +60,7 @@ namespace Desktop_Cleaner
                     }
                     else
                     {
-                        stvari.Add(new ListView_Data() {Name = file_a});
+                        stvari.Add(new ListView_Data() { Name = file_a });
                     }
                 }
 
@@ -74,7 +73,7 @@ namespace Desktop_Cleaner
                     }
                     else
                     {
-                        stvari.Add(new ListView_Data() {Name = file_b + " (((PUBLIC)))"});
+                        stvari.Add(new ListView_Data() { Name = file_b + " (((PUBLIC)))" });
                     }
                 }
 
@@ -86,7 +85,7 @@ namespace Desktop_Cleaner
                     }
                     else
                     {
-                        stvari.Add(new ListView_Data() { Name = file_b+" (((PUBLIC)))" });
+                        stvari.Add(new ListView_Data() { Name = file_b + " (((PUBLIC)))" });
                     }
                 }
                 return stvari;
@@ -99,7 +98,7 @@ namespace Desktop_Cleaner
         }
 
 
-        public bool User_public_check (string vnos)    //todo ce bo kaksna napaka z tem da gre cez string al neki ker je pac 12 mest je tole problem in se more spremeniti     (!!!rešeno)
+        public bool User_public_check(string vnos)    //todo ce bo kaksna napaka z tem da gre cez string al neki ker je pac 12 mest je tole problem in se more spremeniti     (!!!rešeno)
         {
             try
             {
@@ -112,7 +111,7 @@ namespace Desktop_Cleaner
             {
                 return false;       // basicly ce je public vrne true ce pa ni vrne false
             }
-               
+
         }
 
 

@@ -52,7 +52,7 @@ namespace Desktop_Cleaner
                 {
                     while (rdr.Read())
                     {
-                        datoteke.Add(rdr.GetString(0));                          
+                        datoteke.Add(rdr.GetString(0));
                     }
                 }
             }
@@ -85,7 +85,8 @@ namespace Desktop_Cleaner
 
         public void Update_settings(int a)
         {
-            using (SQLiteCommand cmd = new SQLiteCommand(@"UPDATE Settings SET New_folder = (@true_false) WHERE ROWID = 1;", _sqliteConn)) { 
+            using (SQLiteCommand cmd = new SQLiteCommand(@"UPDATE Settings SET New_folder = (@true_false) WHERE ROWID = 1;", _sqliteConn))
+            {
                 cmd.Parameters.AddWithValue("@true_false", a);
                 cmd.Prepare();
                 cmd.ExecuteNonQuery();

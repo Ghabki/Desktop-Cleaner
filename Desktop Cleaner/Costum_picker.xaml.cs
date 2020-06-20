@@ -31,7 +31,7 @@ namespace Desktop_Cleaner
             {
                 if (lis.SelectedItems.Count == 0)
                 {
-                    MessageBox.Show("Nicesar nisi izbral","information", MessageBoxButton.OK, MessageBoxImage.Information);   
+                    MessageBox.Show("Nicesar nisi izbral", "information", MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
 
@@ -86,7 +86,7 @@ namespace Desktop_Cleaner
         public List<string> Vrni()
         {
             return _vrni;
-            
+
         }
 
         public void resetList()

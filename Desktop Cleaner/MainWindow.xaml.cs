@@ -9,7 +9,8 @@ namespace Desktop_Cleaner
     {
         #region Window
 
-        public MainWindow() {
+        public MainWindow()
+        {
             InitializeComponent();
             Init();
         }
@@ -20,20 +21,23 @@ namespace Desktop_Cleaner
         readonly string _publicPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory);
 
         #region Button_clicks
-        private void Clean_Button_Click(object sender, RoutedEventArgs e) {
+        private void Clean_Button_Click(object sender, RoutedEventArgs e)
+        {
             CheckBox_save();
             Clean_desek();
 
         }
 
-        private void Remove_Button_Click(object sender, RoutedEventArgs e) {
+        private void Remove_Button_Click(object sender, RoutedEventArgs e)
+        {
             //zbrise označeni file name
 
             Remove_file();
         }
 
-        private void Add_Button_Button_Click(object sender, RoutedEventArgs e) {
-            var window = new Costum_picker(povezava, delo); 
+        private void Add_Button_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Costum_picker(povezava, delo);
             window.ShowDialog();
             List<string> daj_v_bazo = new List<string>(window.Vrni()); // mores drugace prekopirat list ker cene kazalci zbrijeso iz obeh
             window.resetList();
@@ -46,12 +50,13 @@ namespace Desktop_Cleaner
 
         #endregion
 
-        Podatki povezava ;
-        Delo delo ;
+        Podatki povezava;
+        Delo delo;
 
         #region Init
-        
-        private void Init() {
+
+        private void Init()
+        {
             delo = new Delo(_desktopPath, _publicPath);
             povezava = new Podatki();
 
@@ -62,21 +67,25 @@ namespace Desktop_Cleaner
         #endregion
 
         #region Functions
-        public void Add_file(string file_name) {
+        public void Add_file(string file_name)
+        {
             string prilepi;
 
-            try {
+            try
+            {
                 povezava.Dodaj(file_name);
 
                 prilepi = delo.Refactor_string(file_name);
-                List_Files.Items.Add(prilepi); 
+                List_Files.Items.Add(prilepi);
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 MessageBox.Show("Database error in adding file name to database " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void Remove_file() {
+        private void Remove_file()
+        {
             string item = string.Empty;
             try
             {
@@ -86,7 +95,7 @@ namespace Desktop_Cleaner
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("You need to select a line to delete it.", "Reminder", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("You need to select a line to delete it.", "Reminder", MessageBoxButton.OK, MessageBoxImage.Information);
                 Console.WriteLine(ex);
             }
 
@@ -101,9 +110,12 @@ namespace Desktop_Cleaner
             }
             Console.WriteLine(full_item); // tole se izbrise iz database
 
-            try {
+            try
+            {
                 povezava.Izbrisi(full_item);
-            }catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show("Database error: " + ex, "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             //System.Windows.MessageBox.Show(item, "FileDialog Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -129,37 +141,51 @@ namespace Desktop_Cleaner
         }
 
         private int _settingStevilka;
-        private void CheckBox_set() {
-            try {
+        private void CheckBox_set()
+        {
+            try
+            {
                 _settingStevilka = povezava.Select_Settings();
-                if (_settingStevilka == 1) {
+                if (_settingStevilka == 1)
+                {
                     Check_Box_Button.IsChecked = true;
 
-                } else {
+                }
+                else
+                {
                     Check_Box_Button.IsChecked = false;
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 MessageBox.Show("Check box set error: " + ex, "CheckBox load Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
 
-        private void CheckBox_save() {
-            if (Check_Box_Button.IsChecked.Value) {
-                try {
+        private void CheckBox_save()
+        {
+            if (Check_Box_Button.IsChecked.Value)
+            {
+                try
+                {
                     povezava.Update_settings(1);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
-            } else {
-                try {
+            }
+            else
+            {
+                try
+                {
                     povezava.Update_settings(0);
 
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show("Check box save error: " + ex, "CheckBox save Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -176,7 +202,7 @@ namespace Desktop_Cleaner
                     ime_mape = Path.Combine(_desktopPath, ime_mape); // Directory.CreateDirectory(<------------
                     Directory.CreateDirectory(ime_mape);
                     povezava.Dodaj_zadnjo_mapo(ime_mape);
-                    Console.WriteLine("!!!!!"+ime_mape);
+                    Console.WriteLine("!!!!!" + ime_mape);
 
                     premik(ime_mape);
                     //todo metoda za premik podatkov in    izpiši na okence da je spravilo v to mapo da uporabnik ve
@@ -184,8 +210,8 @@ namespace Desktop_Cleaner
                 else
                 {
                     string prejšnja_mapa = povezava.Vrni_zadnjo_mapo();
-                    
-                    if (prejšnja_mapa=="" || !Directory.Exists(prejšnja_mapa))
+
+                    if (prejšnja_mapa == "" || !Directory.Exists(prejšnja_mapa))
                     {
                         string ime_mape = delo.Check_map();
                         ime_mape = Path.Combine(_desktopPath, ime_mape);
@@ -196,7 +222,7 @@ namespace Desktop_Cleaner
                     }
                     else
                     {
-                        
+
                         string map_path = Path.Combine(_desktopPath, prejšnja_mapa);
                         Directory.CreateDirectory(map_path);
                         premik(map_path);
@@ -205,7 +231,9 @@ namespace Desktop_Cleaner
                     //naredi da napise v mapo ki je bila nazadnje uporabljena oziroma nazadnje narejena ali neki
                     Console.WriteLine("naredi da spravi v v prejšnjo mapo mapo");
                 }
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine("napaka pri kreiranju mape na " + ex);
             }
         }
@@ -222,14 +250,14 @@ namespace Desktop_Cleaner
                 foreach (var nam in delo.Datoteke_namizje())// to do tukaj naredui nekaj da prepreci null
                 {
                     che = nam.Name;
-                    Console.WriteLine(che); 
+                    Console.WriteLine(che);
                     if (delo.User_public_check(che))
                     {
-                        namizje.Add(_publicPath + "\\" + che.Remove(che.Length - 13));// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
+                        namizje.Add(Path.Combine(_publicPath, che.Remove(che.Length - 13)));// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
                     }
                     else
                     {
-                        namizje.Add(_desktopPath + "\\"+ nam.Name);// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
+                        namizje.Add(_desktopPath + "\\" + nam.Name);// ce je slucajo namizje prazno bo vrglo nazaj null(pac dodaj exception in je)
                     }
 
                 }
@@ -250,17 +278,17 @@ namespace Desktop_Cleaner
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
 
-                    if (ne_premikat ==null)
+                    if (ne_premikat == null)
                     {
                         continue;// todo naredi da ce slucajno ne premakne nic da tudi napise da ni nic premakniilo ali neki
-                        
+
                     }
                     if (!ne_premikat.Contains(last))
                     {
                         try
                         {
-                            Console.WriteLine(last + "\\" + " " + kam+"\\"+delo.Refactor_string(last)); 
-                            
+                            Console.WriteLine(last + "\\" + " " + kam + "\\" + delo.Refactor_string(last));
+
 
                             Directory.Move(last, kam + "\\" + delo.Refactor_string(last));
                             //Directory.Move(last, kam);
@@ -284,9 +312,9 @@ namespace Desktop_Cleaner
                     {
                         try
                         {
-                            
 
-                            File.Move(last, kam+"\\"+delo.Refactor_string(last)); 
+
+                            File.Move(last, kam + "\\" + delo.Refactor_string(last));
                         }
                         catch (Exception e)
                         {
