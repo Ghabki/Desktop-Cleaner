@@ -202,7 +202,7 @@ namespace Desktop_Cleaner
                     ime_mape = Path.Combine(_desktopPath, ime_mape); // Directory.CreateDirectory(<------------
                     Directory.CreateDirectory(ime_mape);
                     povezava.Dodaj_zadnjo_mapo(ime_mape);
-                    Console.WriteLine("!!!!!" + ime_mape);
+                    Console.WriteLine("!!!!! (To vrstico sem dodal samo kot testiranje git brancha)" + ime_mape);
 
                     premik(ime_mape);
                     //todo metoda za premik podatkov in    izpiši na okence da je spravilo v to mapo da uporabnik ve
